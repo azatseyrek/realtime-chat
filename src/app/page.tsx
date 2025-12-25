@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 
 const Page = () => {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="text-center text-sm text-zinc-500">Loading…</div>}>
       <Lobby />
     </Suspense>
   );
@@ -26,24 +26,11 @@ function Lobby() {
 
   const { mutate: createRoom } = useMutation({
     mutationFn: async () => {
-      const res = await client.rooms.create.post();
+      const res = await client.room.create.post();
 
-      if (res.status !== 200) {
-        const message = (res.error?.value as { message?: string })?.message ?? 'Unexpected error';
-        throw new Error(message);
+      if (res.status === 200) {
+        router.push(`/room/${res.data?.roomId}`);
       }
-
-      if (!res.data?.roomId) {
-        throw new Error('Room ID missing in response');
-      }
-
-      return res.data;
-    },
-    onSuccess: (data: { roomId: string }) => {
-      router.push(`/room/${data.roomId}`);
-    },
-    onError: (error) => {
-      console.error('Error creating room:', error);
     },
   });
 

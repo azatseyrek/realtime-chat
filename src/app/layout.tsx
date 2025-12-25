@@ -4,9 +4,8 @@ import './globals.css';
 import { Providers } from '@/components/providers';
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
   variable: '--font-jetbrains-mono',
-  weight: ['400', '700'],
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
