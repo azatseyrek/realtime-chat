@@ -266,12 +266,16 @@ const schema = {
 
 ### Environment Variables
 
-Create a `.env.local` file:
+Create a `.env.local` file (or `.env` for local development):
 
 ```env
+# Required: Upstash Redis credentials
 UPSTASH_REDIS_REST_URL=your_redis_url
 UPSTASH_REDIS_REST_TOKEN=your_redis_token
-NEXT_PUBLIC_APP_URL=https://your-domain.com  # Optional, auto-detected in client
+
+# Optional: API base URL (auto-detected from window.location.origin on client-side)
+NEXT_PUBLIC_APP_URL=http://localhost:3000  # Development
+# NEXT_PUBLIC_APP_URL=https://your-domain.com  # Production
 ```
 
 ### Installation

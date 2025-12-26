@@ -1,5 +1,6 @@
 import { redis } from '@/lib/redis';
 import { Elysia, t } from 'elysia';
+import { cors } from '@elysiajs/cors';
 import { nanoid } from 'nanoid';
 import { authMiddleware } from './auth';
 import { z } from 'zod';
@@ -99,7 +100,17 @@ const messages = new Elysia({ prefix: '/messages' })
     { query: z.object({ roomId: z.string() }) }
   );
 
-const app = new Elysia({ prefix: '/api' }).use(rooms).use(messages);
+const app = new Elysia({ prefix: '/api' })
+  .use(
+    cors({
+      origin: true, // Allow all origins or specify your domain
+      credentials: true,
+      methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    })
+  )
+  .use(rooms)
+  .use(messages);
 
 export const GET = app.fetch;
 export const POST = app.fetch;
