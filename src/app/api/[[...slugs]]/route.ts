@@ -103,10 +103,12 @@ const messages = new Elysia({ prefix: '/messages' })
 const app = new Elysia({ prefix: '/api' })
   .use(
     cors({
-      origin: true, // Allow all origins or specify your domain
+      origin: true,
       credentials: true,
-      methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
+      methods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT', 'PATCH'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+      exposeHeaders: ['Content-Length', 'X-Request-Id'],
+      maxAge: 86400, // 24 hours
     })
   )
   .use(rooms)
@@ -115,5 +117,6 @@ const app = new Elysia({ prefix: '/api' })
 export const GET = app.fetch;
 export const POST = app.fetch;
 export const DELETE = app.fetch;
+export const OPTIONS = app.fetch;
 
 export type App = typeof app;
