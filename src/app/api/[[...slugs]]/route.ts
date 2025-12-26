@@ -103,7 +103,18 @@ const messages = new Elysia({ prefix: '/messages' })
 const app = new Elysia({ prefix: '/api' })
   .use(
     cors({
-      origin: true,
+      origin: (request) => {
+        const origin = request.headers.get('origin');
+        // Allow your production and preview domains
+        if (origin?.includes('secret-realtime-chat') && origin?.includes('vercel.app')) {
+          return true;
+        }
+        // Allow localhost for development
+        if (origin?.includes('localhost')) {
+          return true;
+        }
+        return false;
+      },
       credentials: true,
       methods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT', 'PATCH'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],

@@ -40,7 +40,12 @@ export const proxy = async (req: NextRequest) => {
   const token = nanoid();
 
   // Add user to connected list
-  response.cookies.set('x-auth-token', token, { path: `/`, httpOnly: true, secure: !!isProd, sameSite: 'strict' });
+  response.cookies.set('x-auth-token', token, {
+    path: `/`,
+    httpOnly: true,
+    secure: !!isProd,
+    sameSite: isProd ? 'none' : 'lax',
+  });
 
   // Update connected users  meta.connected.push(token);
   await redis.hset(`meta:${roomId}`, {
