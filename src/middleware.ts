@@ -10,7 +10,7 @@ interface RoomMeta extends Record<string, unknown> {
 // check if prod
 const isProd = process.env.NODE_ENV === 'production';
 
-export const proxy = async (req: NextRequest) => {
+export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
   const roomMatch = pathname.match(/^\/room\/([^\/]+)(\/.*)?$/);
@@ -47,13 +47,13 @@ export const proxy = async (req: NextRequest) => {
     sameSite: isProd ? 'none' : 'lax',
   });
 
-  // Update connected users  meta.connected.push(token);
+  // Update connected users
   await redis.hset(`meta:${roomId}`, {
     connected: [...(meta.connected || []), token],
   });
 
   return response;
-};
+}
 
 export const config = {
   matcher: '/room/:path*',
